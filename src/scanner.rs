@@ -1,4 +1,3 @@
-use std::collections::HashMap;
 use crate::{Token, TokenType};
 use crate::object::Object;
 
@@ -8,37 +7,16 @@ pub struct Scanner {
     start: usize,
     current: usize,
     line: usize,
-    keywords: HashMap<String, TokenType>
 }
 
 impl Scanner {
     pub fn new(source: String) -> Self {
-        let mut keywords = HashMap::new();
-
-        keywords.insert("and".to_string(), TokenType::AND);
-        keywords.insert("class".to_string(), TokenType::CLASS);
-        keywords.insert("else".to_string(), TokenType::ELSE);
-        keywords.insert("false".to_string(), TokenType::FALSE);
-        keywords.insert("for".to_string(), TokenType::FOR);
-        keywords.insert("fun".to_string(), TokenType::FUN);
-        keywords.insert("if".to_string(), TokenType::IF);
-        keywords.insert("nil".to_string(), TokenType::NIL);
-        keywords.insert("or".to_string(), TokenType::OR);
-        keywords.insert("print".to_string(), TokenType::PRINT);
-        keywords.insert("return".to_string(), TokenType::RETURN);
-        keywords.insert("super".to_string(), TokenType::SUPER);
-        keywords.insert("this".to_string(), TokenType::THIS);
-        keywords.insert("true".to_string(), TokenType::TRUE);
-        keywords.insert("var".to_string(), TokenType::VAR);
-        keywords.insert("while".to_string(), TokenType::WHILE);
-
         Self {
             source,
             tokens: Vec::new(),
             start: 0,
             current: 0,
             line: 0,
-            keywords
         }
     }
 
@@ -146,7 +124,7 @@ impl Scanner {
         }
 
         let text = &self.source[self.start..self.current];
-        let token_type = self.keywords.get(text);
+        let token_type = Self::keywords(text);
         let token_type = match token_type {
             Some(token_type) => token_type.clone(),
             None => TokenType::IDENTIFIER
@@ -239,6 +217,28 @@ impl Scanner {
 
     fn is_digit(&self, c: char) -> bool {
             c.is_ascii_digit()
+    }
+
+    fn keywords(check: &str) -> Option<TokenType> {
+        match check {
+            "and" => Some(TokenType::AND),
+            "class" => Some(TokenType::CLASS),
+            "else" => Some(TokenType::ELSE),
+            "false" => Some(TokenType::FALSE),
+            "for" => Some(TokenType::FOR),
+            "fun" => Some(TokenType::FUN),
+            "if" => Some(TokenType::IF),
+            "nil" => Some(TokenType::NIL),
+            "or" => Some(TokenType::OR),
+            "print" => Some(TokenType::PRINT),
+            "return" => Some(TokenType::RETURN),
+            "super" => Some(TokenType::SUPER),
+            "this" => Some(TokenType::THIS),
+            "true" => Some(TokenType::TRUE),
+            "var" => Some(TokenType::VAR),
+            "while" => Some(TokenType::WHILE),
+            _ => None,
+        }
     }
 }
 
