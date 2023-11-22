@@ -7,19 +7,19 @@ pub enum Expr {
     Unary(Token, Box<Expr>),
 }
 
-pub trait Visitor {
-    fn visit_binary_expr(&self, left: &Expr, operator: &Token, right: &Expr) -> String;
-    fn visit_grouping_expr(&self, expression: &Expr) -> String;
-    fn visit_literal_expr(&self, value: &str) -> String;
-    fn visit_unary_expr(&self, operator: &Token, right: &Expr) -> String;
+pub trait Visitor<T> {
+    fn visit_binary_expr(&self, left: &Expr, operator: &Token, right: &Expr) -> T;
+    fn visit_grouping_expr(&self, expression: &Expr) -> T;
+    fn visit_literal_expr(&self, value: &str) -> T;
+    fn visit_unary_expr(&self, operator: &Token, right: &Expr) -> T;
 }
 
-pub trait Accept {
-    fn accept<V: Visitor>(&self, visitor: &V) -> String;
+pub trait Accept<T> {
+    fn accept<V: Visitor<T>>(&self, visitor: &V) -> T;
 }
 
-impl Accept for Expr {
-    fn accept<V: Visitor>(&self, visitor: &V) -> String {
+impl Accept<String> for Expr {
+    fn accept<V: Visitor<String>>(&self, visitor: &V) -> String {
         match self {
             Expr::Binary(left, operator, right) => {
                 visitor.visit_binary_expr(left, operator, right)

@@ -60,7 +60,7 @@ fn define_type(file: &mut std::fs::File, class_name: &str, field_list: &str) -> 
 
 fn define_visitor(file: &mut std::fs::File, base_name: &str, types: Vec<&str>) -> std::io::Result<()> {
     writeln!(file)?;
-    writeln!(file, "pub trait Visitor {{")?;
+    writeln!(file, "pub trait Visitor<T> {{")?;
 
     for type_ in &types {
         let type_name = type_.split(';').collect::<Vec<&str>>()[0].trim();
@@ -79,19 +79,19 @@ fn define_visitor(file: &mut std::fs::File, base_name: &str, types: Vec<&str>) -
                 }
             ).collect::<Vec<String>>().join(", ");
 
-        writeln!(file, "    fn visit_{}_{}(&self, {}) -> String;", type_name.to_lowercase(), base_name.to_lowercase(), reffed)?;
+        writeln!(file, "    fn visit_{}_{}(&self, {}) -> T;", type_name.to_lowercase(), base_name.to_lowercase(), reffed)?;
     }
 
     writeln!(file, "}}")?;
 
     writeln!(file)?;
-    writeln!(file, "pub trait Accept {{")?;
-    writeln!(file, "    fn accept<V: Visitor>(&self, visitor: &V) -> String;")?;
+    writeln!(file, "pub trait Accept<T> {{")?;
+    writeln!(file, "    fn accept<V: Visitor<T>>(&self, visitor: &V) -> T;")?;
     writeln!(file, "}}")?;
 
     writeln!(file)?;
-    writeln!(file, "impl Accept for {} {{", base_name)?;
-    writeln!(file, "    fn accept<V: Visitor>(&self, visitor: &V) -> String {{")?;
+    writeln!(file, "impl Accept<String> for {} {{", base_name)?;
+    writeln!(file, "    fn accept<V: Visitor<String>>(&self, visitor: &V) -> String {{")?;
     writeln!(file, "        match self {{")?;
 
     for type_ in &types {

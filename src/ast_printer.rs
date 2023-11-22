@@ -22,7 +22,7 @@ impl AstPrinter {
 }
 
 
-impl Visitor for AstPrinter {
+impl Visitor<String> for AstPrinter {
     fn visit_binary_expr(&self, left: &Expr, operator: &Token, right: &Expr) -> String {
         self.parenthesize(operator.lexeme(), vec![left, right])
     }
