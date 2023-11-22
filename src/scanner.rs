@@ -1,5 +1,6 @@
 use std::collections::HashMap;
 use crate::{Token, TokenType};
+use crate::object::Object;
 
 pub struct Scanner {
     source: String,
@@ -68,7 +69,7 @@ impl Scanner {
         self.add_token_literal(token_type, None);
     }
 
-    fn add_token_literal(&mut self, token_type: TokenType, literal: Option<String>) {
+    fn add_token_literal(&mut self, token_type: TokenType, literal: Option<Object>) {
         let text = &self.source[self.start..self.current];
         self.tokens.push(Token::new(token_type, text.to_string(), literal, self.line));
     }
@@ -167,7 +168,8 @@ impl Scanner {
         }
 
         let value = &self.source[self.start..self.current];
-        self.add_token_literal(TokenType::NUMBER, Some(value.to_string()));
+        let num = value.parse().unwrap();
+        self.add_token_literal(TokenType::NUMBER, Some(Object::Num(num)));
     }
 
     fn string(&mut self) {
@@ -186,7 +188,7 @@ impl Scanner {
         self.advance();
 
         let value = &self.source[self.start + 1..self.current - 1];
-        self.add_token_literal(TokenType::STRING, Some(value.to_string()));
+        self.add_token_literal(TokenType::STRING, Some(Object::Str(value.to_string())));
     }
 
     fn match_char(&mut self, expected: char) -> bool {
@@ -327,7 +329,7 @@ mod tests {
         let tokens = scanner.scan_tokens();
 
         assert_eq!(tokens, vec![
-            Token::new(TokenType::STRING, "\"this is a string\"".to_string(), Some("this is a string".to_string()), 0),
+            Token::new(TokenType::STRING, "\"this is a string\"".to_string(), Some(Object::Str("this is a string".to_string())), 0),
             Token::new(TokenType::EOF, "".to_string(), None, 0),
         ]);
     }
@@ -339,7 +341,7 @@ mod tests {
         let tokens = scanner.scan_tokens();
 
         assert_eq!(tokens, vec![
-            Token::new(TokenType::NUMBER, "123".to_string(), Some("123".to_string()), 0),
+            Token::new(TokenType::NUMBER, "123".to_string(), Some(Object::Num(123_f64)), 0),
             Token::new(TokenType::EOF, "".to_string(), None, 0),
         ]);
     }
@@ -351,7 +353,7 @@ mod tests {
         let tokens = scanner.scan_tokens();
 
         assert_eq!(tokens, vec![
-            Token::new(TokenType::NUMBER, "123.456".to_string(), Some("123.456".to_string()), 0),
+            Token::new(TokenType::NUMBER, "123.456".to_string(), Some(Object::Num(123.456)), 0),
             Token::new(TokenType::EOF, "".to_string(), None, 0),
         ]);
     }

@@ -4,6 +4,7 @@ mod token;
 mod runner;
 mod expr;
 mod ast_printer;
+mod object;
 
 pub use runner::Runner;
 pub use token_type::TokenType;
