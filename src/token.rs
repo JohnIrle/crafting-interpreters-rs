@@ -17,8 +17,22 @@ impl Token {
             line
         }
     }
+
+    pub fn token_type(&self) -> &TokenType {
+        &self.token_type
+    }
+
     pub fn lexeme(&self) -> &String {
         &self.lexeme
+    }
+
+    pub fn literal(&self) -> Option<&Object> {
+        // TODO: handle unwrap.
+        self.literal.as_ref()
+    }
+
+    pub fn line(&self) -> usize {
+        self.line
     }
 }
 
