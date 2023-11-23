@@ -7,7 +7,7 @@ impl AstPrinter {
     pub fn new() -> Self {
         Self
     }
-    fn print(&self, expr: &Expr) -> String {
+    pub fn print(&self, expr: &Expr) -> String {
         expr.accept(self)
     }
     fn parenthesize(&self, name: &str, exprs: Vec<&Expr>) -> String {

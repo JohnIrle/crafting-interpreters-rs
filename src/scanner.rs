@@ -112,7 +112,7 @@ impl Scanner {
                     self.identifier();
                 }
                 else {
-                    crate::error(self.line, "Unexpected character".to_string());
+                    crate::line_error(self.line, "Unexpected character");
                 }
             }
         }
@@ -159,7 +159,7 @@ impl Scanner {
         }
 
         if self.is_at_end() {
-            crate::error(self.line, "Unterminated string".to_string());
+            crate::line_error(self.line, "Unterminated string");
             return;
         }
 

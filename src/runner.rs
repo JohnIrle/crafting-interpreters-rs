@@ -1,3 +1,6 @@
+use std::io::Write;
+use crate::ast_printer::AstPrinter;
+
 pub struct Runner {
     had_error: bool
 }
@@ -21,6 +24,7 @@ impl Runner {
         loop {
             print!("> ");
             let mut line = String::new();
+            std::io::stdout().flush().expect("Failed to flush stdout");
             match std::io::stdin().read_line(&mut line) {
                 Ok(_) => self.run(line),
                 _ => break
@@ -31,10 +35,14 @@ impl Runner {
     fn run (&mut self, source: String) {
         let mut scanner = crate::Scanner::new(source);
         let tokens = scanner.scan_tokens();
-        for token in tokens {
-            println!("{:?}", token);
+        let mut parser = crate::Parser::new(tokens);
+        let expr = parser.parse();
+
+        if self.had_error {
+            return;
         }
-        self.had_error = true;
+        let ast_printer = AstPrinter::new();
+        println!("{}", ast_printer.print(&expr.unwrap()));
     }
 
 }
