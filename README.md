@@ -20,7 +20,7 @@ This is an in progress project aiming to implement both versions of the Lox Lang
 
 ## Things I've learned so far
 
-- How to implement an approximation of abstract classes and the visitor pattern in Rust using traits, generics and enums.
-- How to generate a source file by mapping over a grammar configuration. 
-- Scanning text to produce tokens.
-- Parsing tokens to produce an abstract syntax tree for expressions.
+- How to implement an approximation of abstract classes and the visitor pattern in Rust using traits, generics and enums. [Here](https://github.com/JohnIrle/crafting-interpreters-rs/blob/6a1e7538b76919b9e0821ee5301ebd872ee3a3a9/src/expr.rs) and [Here](https://github.com/JohnIrle/crafting-interpreters-rs/blob/6a1e7538b76919b9e0821ee5301ebd872ee3a3a9/src/ast_printer.rs)
+- How to generate a source file by mapping over a grammar configuration. [Here](https://github.com/JohnIrle/crafting-interpreters-rs/blob/6a1e7538b76919b9e0821ee5301ebd872ee3a3a9/src/generate_ast.rs)
+- Scanning text to produce tokens. [Here](https://github.com/JohnIrle/crafting-interpreters-rs/blob/6a1e7538b76919b9e0821ee5301ebd872ee3a3a9/src/scanner.rs)
+- Parsing tokens to produce an abstract syntax tree for expressions. [Here](https://github.com/JohnIrle/crafting-interpreters-rs/blob/6a1e7538b76919b9e0821ee5301ebd872ee3a3a9/src/parser.rs)
