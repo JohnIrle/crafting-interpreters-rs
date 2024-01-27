@@ -3,5 +3,9 @@
 version = 3
 
 [[package]]
-name = "rlox"
+name = "rlox-ast"
+version = "0.1.0"
+
+[[package]]
+name = "rlox-bytecode"
 version = "0.1.0"

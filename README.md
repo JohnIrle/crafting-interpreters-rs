@@ -17,6 +17,7 @@ This is an in progress project aiming to implement both versions of the Lox Lang
 - [ ] Chapter 11: Resolving and Binding
 - [ ] Chapter 12: Classes
 - [ ] Chapter 13: Inheritance
+- [x] Chapter 14: Chunks Of Bytecode
 
 ## Things I've learned so far
 
@@ -24,3 +25,4 @@ This is an in progress project aiming to implement both versions of the Lox Lang
 - How to generate a source file by mapping over a grammar configuration. [Here](https://github.com/JohnIrle/crafting-interpreters-rs/blob/6a1e7538b76919b9e0821ee5301ebd872ee3a3a9/src/generate_ast.rs)
 - Scanning text to produce tokens. [Here](https://github.com/JohnIrle/crafting-interpreters-rs/blob/6a1e7538b76919b9e0821ee5301ebd872ee3a3a9/src/scanner.rs)
 - Parsing tokens to produce an abstract syntax tree for expressions. [Here](https://github.com/JohnIrle/crafting-interpreters-rs/blob/6a1e7538b76919b9e0821ee5301ebd872ee3a3a9/src/parser.rs)
+- Enums in C are represented as integer constants. 
