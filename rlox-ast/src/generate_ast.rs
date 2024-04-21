@@ -29,13 +29,18 @@ fn define_ast(output_dir: &str, base_name: &str, types: Vec<&str>) -> std::io::R
     let mut file = std::fs::File::create(path)?;
     writeln!(file, "use crate::Token;")?;
     writeln!(file)?;
-    writeln!(file, "pub enum {} {{", base_name)?;
-
     for type_ in &types {
         let class_name = type_.split(';').collect::<Vec<&str>>()[0].trim();
         let fields = type_.split(';').collect::<Vec<&str>>()[1].trim();
 
-        define_type(&mut file, class_name, fields)?;
+        define_structs(&mut file, class_name, fields)?
+    }
+    writeln!(file, "pub enum {} {{", base_name)?;
+
+    for type_ in &types {
+        let class_name = type_.split(';').collect::<Vec<&str>>()[0].trim();
+
+        define_type(&mut file, class_name)?;
     }
 
     writeln!(file, "}}")?;
@@ -44,27 +49,27 @@ fn define_ast(output_dir: &str, base_name: &str, types: Vec<&str>) -> std::io::R
     Ok(())
 }
 
-fn define_type(
+fn define_structs(
     file: &mut std::fs::File,
     class_name: &str,
     field_list: &str,
 ) -> std::io::Result<()> {
-    write!(file, "    {}(", class_name)?;
+    write!(file, "pub struct {} {{", class_name)?;
     let fields = field_list.split(", ").collect::<Vec<&str>>();
-    let fields = fields
-        .iter()
-        .map(|field| field.split(": ").collect::<Vec<&str>>()[1].trim())
-        .collect::<Vec<&str>>();
     for (i, mut field) in fields.iter().enumerate() {
-        if field == &"Expr" {
-            field = &"Box<Expr>"
-        }
+        let replaced = field.replace("Expr", "Box<Expr>");
         if i == fields.len() - 1 {
-            write!(file, "{}", field)?;
+            write!(file, "\n    pub {}\n", replaced)?;
         } else {
-            write!(file, "{}, ", field)?;
+            write!(file, "\n    pub {},", replaced)?;
         }
     }
+    writeln!(file, "}}")?;
+    Ok(())
+}
+
+fn define_type(file: &mut std::fs::File, class_name: &str) -> std::io::Result<()> {
+    write!(file, "    {}({}", class_name, class_name)?;
     writeln!(file, "),")?;
     Ok(())
 }
@@ -79,27 +84,13 @@ fn define_visitor(
 
     for type_ in &types {
         let type_name = type_.split(';').collect::<Vec<&str>>()[0].trim();
-        let fields = type_.split(';').collect::<Vec<&str>>()[1].trim();
-        let reffed = fields
-            .split(',')
-            .map(|field| {
-                let left = field.split(": ").collect::<Vec<&str>>()[0];
-                let right = field.split(": ").collect::<Vec<&str>>()[1];
-                if field.split(": ").collect::<Vec<_>>()[1] == "String" {
-                    format!("{}: &str", left.trim())
-                } else {
-                    format!("{}: &{}", left.trim(), right.trim())
-                }
-            })
-            .collect::<Vec<String>>()
-            .join(", ");
 
         writeln!(
             file,
-            "    fn visit_{}_{}(&self, {}) -> T;",
+            "    fn visit_{}_{}(&self, expr: &{}) -> T;",
             type_name.to_lowercase(),
             base_name.to_lowercase(),
-            reffed
+            type_name
         )?;
     }
 
@@ -123,24 +114,13 @@ fn define_visitor(
 
     for type_ in &types {
         let type_name = type_.split(';').collect::<Vec<&str>>()[0].trim();
-        let fields = type_.split(';').collect::<Vec<&str>>()[1].trim();
-        let fields = fields
-            .split(", ")
-            .map(|field| field.split(": ").collect::<Vec<&str>>()[0].trim())
-            .collect::<Vec<&str>>()
-            .join(", ");
 
+        writeln!(file, "            {}::{}(expr) => {{", base_name, type_name,)?;
         writeln!(
             file,
-            "            {}::{}({}) => {{",
-            base_name, type_name, &fields
-        )?;
-        writeln!(
-            file,
-            "                visitor.visit_{}_{}({})",
+            "                visitor.visit_{}_{}(expr)",
             type_name.to_lowercase(),
             base_name.to_lowercase(),
-            fields
         )?;
         writeln!(file, "            }},")?;
     }

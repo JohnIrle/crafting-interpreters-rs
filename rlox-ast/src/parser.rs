@@ -3,6 +3,7 @@ use TokenType::{
     NIL, NUMBER, PLUS, RIGHT_PAREN, STRING, TRUE,
 };
 
+use crate::expr::{Binary, Grouping, Literal, Unary};
 use crate::TokenType::{BANG, SLASH, STAR};
 use crate::{error, Expr, Token, TokenType};
 
@@ -30,11 +31,11 @@ impl Parser {
         while self.match_types(vec![BANG_EQUAL, EQUAL_EQUAL]) {
             let operator = self.previous();
             let right = self.comparison();
-            expr = Some(Expr::Binary(
-                Box::new(expr.unwrap()),
+            expr = Some(Expr::Binary(Binary {
+                left: Box::new(expr.unwrap()),
                 operator,
-                Box::new(right.unwrap()),
-            ));
+                right: Box::new(right.unwrap()),
+            }));
         }
 
         expr
@@ -46,11 +47,11 @@ impl Parser {
         while self.match_types(vec![GREATER, GREATER_EQUAL, LESS, LESS_EQUAL]) {
             let operator = self.previous();
             let right = self.term();
-            expr = Some(Expr::Binary(
-                Box::new(expr.unwrap()),
+            expr = Some(Expr::Binary(Binary {
+                left: Box::new(expr.unwrap()),
                 operator,
-                Box::new(right.unwrap()),
-            ));
+                right: Box::new(right.unwrap()),
+            }));
         }
 
         expr
@@ -62,11 +63,11 @@ impl Parser {
         while self.match_types(vec![MINUS, PLUS]) {
             let operator = self.previous();
             let right = self.factor();
-            expr = Some(Expr::Binary(
-                Box::new(expr.unwrap()),
+            expr = Some(Expr::Binary(Binary {
+                left: Box::new(expr.unwrap()),
                 operator,
-                Box::new(right.unwrap()),
-            ));
+                right: Box::new(right.unwrap()),
+            }));
         }
 
         expr
@@ -78,11 +79,11 @@ impl Parser {
         while self.match_types(vec![SLASH, STAR]) {
             let operator = self.previous();
             let right = self.unary();
-            expr = Some(Expr::Binary(
-                Box::new(expr.unwrap()),
+            expr = Some(Expr::Binary(Binary {
+                left: Box::new(expr.unwrap()),
                 operator,
-                Box::new(right.unwrap()),
-            ));
+                right: Box::new(right.unwrap()),
+            }));
         }
 
         expr
@@ -92,7 +93,10 @@ impl Parser {
         if self.match_types(vec![BANG, MINUS]) {
             let operator = self.previous();
             let right = self.unary();
-            return Some(Expr::Unary(operator, Box::new(right.unwrap())));
+            return Some(Expr::Unary(Unary {
+                operator,
+                right: Box::new(right.unwrap()),
+            }));
         }
         self.primary()
     }
@@ -100,27 +104,36 @@ impl Parser {
     // TODO: Return Result?
     fn primary(&mut self) -> Option<Expr> {
         if self.match_types(vec![FALSE]) {
-            return Some(Expr::Literal("false".to_string()));
+            return Some(Expr::Literal(Literal {
+                value: "false".to_string(),
+            }));
         }
         if self.match_types(vec![TRUE]) {
-            return Some(Expr::Literal("true".to_string()));
+            return Some(Expr::Literal(Literal {
+                value: "true".to_string(),
+            }));
         }
         if self.match_types(vec![NIL]) {
-            return Some(Expr::Literal("nil".to_string()));
+            return Some(Expr::Literal(Literal {
+                value: "nil".to_string(),
+            }));
         }
         if self.match_types(vec![NUMBER, STRING]) {
             // TODO: This is a bit of a hack, but it works for now.
-            return Some(Expr::Literal(
-                self.previous()
+            return Some(Expr::Literal(Literal {
+                value: self
+                    .previous()
                     .literal()
                     .expect("could not unwrap")
                     .to_string(),
-            ));
+            }));
         }
         if self.match_types(vec![LEFT_PAREN]) {
             let expr = self.expression();
             self.consume(RIGHT_PAREN, "Expect ')' after expression.");
-            return Some(Expr::Grouping(Box::new(expr.unwrap())));
+            return Some(Expr::Grouping(Grouping {
+                expression: Box::new(expr.unwrap()),
+            }));
         }
         self.error("Expect expression.");
         None
