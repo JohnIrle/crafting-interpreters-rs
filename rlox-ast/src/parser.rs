@@ -1,11 +1,10 @@
 use TokenType::{
-    BANG_EQUAL, EQUAL_EQUAL, FALSE, GREATER, GREATER_EQUAL,
-    LEFT_PAREN, LESS, LESS_EQUAL, MINUS, NIL,
-    NUMBER, PLUS, RIGHT_PAREN, STRING, TRUE,
+    BANG_EQUAL, EQUAL_EQUAL, FALSE, GREATER, GREATER_EQUAL, LEFT_PAREN, LESS, LESS_EQUAL, MINUS,
+    NIL, NUMBER, PLUS, RIGHT_PAREN, STRING, TRUE,
 };
 
-use crate::{Expr, Token, TokenType, error};
 use crate::TokenType::{BANG, SLASH, STAR};
+use crate::{error, Expr, Token, TokenType};
 
 pub struct Parser {
     tokens: Vec<Token>,
@@ -14,10 +13,7 @@ pub struct Parser {
 
 impl Parser {
     pub fn new(tokens: Vec<Token>) -> Self {
-        Self {
-            tokens,
-            current: 0,
-        }
+        Self { tokens, current: 0 }
     }
 
     pub fn parse(&mut self) -> Option<Expr> {
@@ -34,7 +30,11 @@ impl Parser {
         while self.match_types(vec![BANG_EQUAL, EQUAL_EQUAL]) {
             let operator = self.previous();
             let right = self.comparison();
-            expr = Some(Expr::Binary(Box::new(expr.unwrap()), operator, Box::new(right.unwrap())));
+            expr = Some(Expr::Binary(
+                Box::new(expr.unwrap()),
+                operator,
+                Box::new(right.unwrap()),
+            ));
         }
 
         expr
@@ -46,7 +46,11 @@ impl Parser {
         while self.match_types(vec![GREATER, GREATER_EQUAL, LESS, LESS_EQUAL]) {
             let operator = self.previous();
             let right = self.term();
-            expr = Some(Expr::Binary(Box::new(expr.unwrap()), operator, Box::new(right.unwrap())));
+            expr = Some(Expr::Binary(
+                Box::new(expr.unwrap()),
+                operator,
+                Box::new(right.unwrap()),
+            ));
         }
 
         expr
@@ -58,7 +62,11 @@ impl Parser {
         while self.match_types(vec![MINUS, PLUS]) {
             let operator = self.previous();
             let right = self.factor();
-            expr = Some(Expr::Binary(Box::new(expr.unwrap()), operator, Box::new(right.unwrap())));
+            expr = Some(Expr::Binary(
+                Box::new(expr.unwrap()),
+                operator,
+                Box::new(right.unwrap()),
+            ));
         }
 
         expr
@@ -70,7 +78,11 @@ impl Parser {
         while self.match_types(vec![SLASH, STAR]) {
             let operator = self.previous();
             let right = self.unary();
-            expr = Some(Expr::Binary(Box::new(expr.unwrap()), operator, Box::new(right.unwrap())));
+            expr = Some(Expr::Binary(
+                Box::new(expr.unwrap()),
+                operator,
+                Box::new(right.unwrap()),
+            ));
         }
 
         expr
@@ -98,7 +110,12 @@ impl Parser {
         }
         if self.match_types(vec![NUMBER, STRING]) {
             // TODO: This is a bit of a hack, but it works for now.
-            return Some(Expr::Literal(self.previous().literal().expect("could not unwrap").to_string()));
+            return Some(Expr::Literal(
+                self.previous()
+                    .literal()
+                    .expect("could not unwrap")
+                    .to_string(),
+            ));
         }
         if self.match_types(vec![LEFT_PAREN]) {
             let expr = self.expression();
@@ -151,7 +168,9 @@ impl Parser {
                 TokenType::WHILE => return,
                 TokenType::PRINT => return,
                 TokenType::RETURN => return,
-                _ => { self.advance(); }
+                _ => {
+                    self.advance();
+                }
             }
         }
     }

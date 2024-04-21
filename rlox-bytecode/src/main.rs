@@ -4,7 +4,7 @@ use rlox::chunk::OpCode::{OP_CONSTANT, OP_RETURN};
 fn main() {
     let mut chunk = Chunk::new();
 
-    let constant =  chunk.add_constant(1.2);
+    let constant = chunk.add_constant(1.2);
     chunk.write_chunk(OP_CONSTANT.value(), 123);
     chunk.write_chunk(constant as u8, 123);
 

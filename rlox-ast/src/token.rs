@@ -5,16 +5,21 @@ pub struct Token {
     token_type: TokenType,
     lexeme: String,
     literal: Option<Object>,
-    line: usize
+    line: usize,
 }
 
 impl Token {
-    pub fn new(token_type: TokenType, lexeme: String, literal: Option<Object>, line: usize) -> Self {
+    pub fn new(
+        token_type: TokenType,
+        lexeme: String,
+        literal: Option<Object>,
+        line: usize,
+    ) -> Self {
         Self {
             token_type,
             lexeme,
             literal,
-            line
+            line,
         }
     }
 
@@ -38,7 +43,12 @@ impl Token {
 
 impl std::fmt::Display for Token {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-       write!(f, "{} {} {}", self.token_type, self.lexeme, self.literal.as_ref().unwrap())
+        write!(
+            f,
+            "{} {} {}",
+            self.token_type,
+            self.lexeme,
+            self.literal.as_ref().unwrap()
+        )
     }
 }
-

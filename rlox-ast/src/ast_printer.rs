@@ -1,5 +1,5 @@
-use crate::{Token};
-use crate::expr::{Accept, Visitor, Expr};
+use crate::expr::{Accept, Expr, Visitor};
+use crate::Token;
 
 pub struct AstPrinter;
 
@@ -20,7 +20,6 @@ impl AstPrinter {
         builder
     }
 }
-
 
 impl Visitor<String> for AstPrinter {
     fn visit_binary_expr(&self, left: &Expr, operator: &Token, right: &Expr) -> String {
@@ -45,8 +44,8 @@ impl Visitor<String> for AstPrinter {
 
 #[cfg(test)]
 mod tests {
-    use crate::TokenType;
     use super::*;
+    use crate::TokenType;
 
     #[test]
     fn test_ast_print() {
@@ -54,11 +53,11 @@ mod tests {
         let expr = Expr::Binary(
             Box::new(Expr::Unary(
                 Token::new(TokenType::MINUS, "-".to_string(), None, 1),
-                Box::new(Expr::Literal("123".to_string()))
+                Box::new(Expr::Literal("123".to_string())),
             )),
             Token::new(TokenType::STAR, "*".to_string(), None, 1),
-            Box::new(Expr::Grouping(
-                Box::new(Expr::Literal("45.67".to_string())))));
+            Box::new(Expr::Grouping(Box::new(Expr::Literal("45.67".to_string())))),
+        );
 
         assert_eq!(ast_printer.print(&expr), "(* (- 123) (group 45.67))");
     }
