@@ -36,18 +36,10 @@ pub trait Accept<T> {
 impl Accept<String> for Expr {
     fn accept<V: Visitor<String>>(&self, visitor: &V) -> String {
         match self {
-            Expr::Binary(expr) => {
-                visitor.visit_binary_expr(expr)
-            },
-            Expr::Grouping(expr) => {
-                visitor.visit_grouping_expr(expr)
-            },
-            Expr::Literal(expr) => {
-                visitor.visit_literal_expr(expr)
-            },
-            Expr::Unary(expr) => {
-                visitor.visit_unary_expr(expr)
-            },
+            Expr::Binary(expr) => visitor.visit_binary_expr(expr),
+            Expr::Grouping(expr) => visitor.visit_grouping_expr(expr),
+            Expr::Literal(expr) => visitor.visit_literal_expr(expr),
+            Expr::Unary(expr) => visitor.visit_unary_expr(expr),
         }
     }
 }

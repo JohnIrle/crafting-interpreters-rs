@@ -115,14 +115,13 @@ fn define_visitor(
     for type_ in &types {
         let type_name = type_.split(';').collect::<Vec<&str>>()[0].trim();
 
-        writeln!(file, "            {}::{}(expr) => {{", base_name, type_name,)?;
+        write!(file, "            {}::{}(expr) =>", base_name, type_name,)?;
         writeln!(
             file,
-            "                visitor.visit_{}_{}(expr)",
+            " visitor.visit_{}_{}(expr),",
             type_name.to_lowercase(),
             base_name.to_lowercase(),
         )?;
-        writeln!(file, "            }},")?;
     }
 
     writeln!(file, "        }}")?;
