@@ -6,7 +6,7 @@ pub type Value = f64;
 pub struct ValueArray {
     capacity: i32,
     pub(crate) count: i32,
-    pub(crate) values: Vec<Value>
+    pub(crate) values: Vec<Value>,
 }
 
 impl ValueArray {

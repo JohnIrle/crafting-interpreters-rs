@@ -1,18 +1,18 @@
-mod scanner;
-mod token_type;
-mod token;
-mod runner;
-mod expr;
 mod ast_printer;
+mod expr;
 mod object;
 mod parser;
+mod runner;
+mod scanner;
+mod token;
+mod token_type;
 
-pub use runner::Runner;
-pub use token_type::TokenType;
-pub use token::Token;
-pub use scanner::Scanner;
 pub use expr::Expr;
 pub use parser::Parser;
+pub use runner::Runner;
+pub use scanner::Scanner;
+pub use token::Token;
+pub use token_type::TokenType;
 
 pub fn line_error(line: usize, message: &str) {
     report(line, "", message);
@@ -21,7 +21,6 @@ pub fn line_error(line: usize, message: &str) {
 fn report(line: usize, location: &str, message: &str) {
     println!("[line {}] Error {}: {}", line, location, message);
 }
-
 
 fn error(token: &Token, message: &str) {
     if *token.token_type() == TokenType::EOF {

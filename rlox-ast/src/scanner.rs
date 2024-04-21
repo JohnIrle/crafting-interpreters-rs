@@ -1,5 +1,5 @@
-use crate::{Token, TokenType};
 use crate::object::Object;
+use crate::{Token, TokenType};
 
 pub struct Scanner {
     source: String,
@@ -20,13 +20,14 @@ impl Scanner {
         }
     }
 
-    pub fn scan_tokens(&mut self)-> Vec<Token> {
-        while !self.is_at_end(){
+    pub fn scan_tokens(&mut self) -> Vec<Token> {
+        while !self.is_at_end() {
             self.start = self.current;
             self.scan_token();
         }
 
-        self.tokens.push(Token::new(TokenType::EOF, "".to_string(), None,  self.line));
+        self.tokens
+            .push(Token::new(TokenType::EOF, "".to_string(), None, self.line));
         self.tokens.clone()
     }
 
@@ -49,7 +50,8 @@ impl Scanner {
 
     fn add_token_literal(&mut self, token_type: TokenType, literal: Option<Object>) {
         let text = &self.source[self.start..self.current];
-        self.tokens.push(Token::new(token_type, text.to_string(), literal, self.line));
+        self.tokens
+            .push(Token::new(token_type, text.to_string(), literal, self.line));
     }
 
     fn scan_token(&mut self) {
@@ -71,28 +73,28 @@ impl Scanner {
                 } else {
                     self.add_token(TokenType::BANG);
                 }
-            },
+            }
             '=' => {
                 if self.match_char('=') {
                     self.add_token(TokenType::EQUAL_EQUAL);
                 } else {
                     self.add_token(TokenType::EQUAL);
                 }
-            },
+            }
             '<' => {
                 if self.match_char('=') {
                     self.add_token(TokenType::LESS_EQUAL);
                 } else {
                     self.add_token(TokenType::LESS);
                 }
-            },
+            }
             '>' => {
                 if self.match_char('=') {
                     self.add_token(TokenType::GREATER_EQUAL);
                 } else {
                     self.add_token(TokenType::GREATER);
                 }
-            },
+            }
             '/' => {
                 if self.match_char('/') {
                     while self.peek() != '\n' && !self.is_at_end() {
@@ -101,8 +103,8 @@ impl Scanner {
                 } else {
                     self.add_token(TokenType::SLASH);
                 }
-            },
-            ' ' | '\r' | '\t' => {},
+            }
+            ' ' | '\r' | '\t' => {}
             '\n' => self.line += 1,
             '"' => self.string(),
             _ => {
@@ -110,8 +112,7 @@ impl Scanner {
                     self.number();
                 } else if self.is_alpha(c) {
                     self.identifier();
-                }
-                else {
+                } else {
                     crate::line_error(self.line, "Unexpected character");
                 }
             }
@@ -127,7 +128,7 @@ impl Scanner {
         let token_type = Self::keywords(text);
         let token_type = match token_type {
             Some(token_type) => token_type.clone(),
-            None => TokenType::IDENTIFIER
+            None => TokenType::IDENTIFIER,
         };
         self.add_token(token_type);
     }
@@ -216,7 +217,7 @@ impl Scanner {
     }
 
     fn is_digit(&self, c: char) -> bool {
-            c.is_ascii_digit()
+        c.is_ascii_digit()
     }
 
     fn keywords(check: &str) -> Option<TokenType> {
@@ -252,19 +253,22 @@ mod tests {
 
         let tokens = scanner.scan_tokens();
 
-        assert_eq!(tokens, vec![
-            Token::new(TokenType::LEFT_PAREN, "(".to_string(), None, 0),
-            Token::new(TokenType::RIGHT_PAREN, ")".to_string(), None, 0),
-            Token::new(TokenType::LEFT_BRACE, "{".to_string(), None, 0),
-            Token::new(TokenType::RIGHT_BRACE, "}".to_string(), None, 0),
-            Token::new(TokenType::COMMA, ",".to_string(), None, 0),
-            Token::new(TokenType::DOT, ".".to_string(), None, 0),
-            Token::new(TokenType::MINUS, "-".to_string(), None, 0),
-            Token::new(TokenType::PLUS, "+".to_string(), None, 0),
-            Token::new(TokenType::STAR, "*".to_string(), None, 0),
-            Token::new(TokenType::SEMICOLON, ";".to_string(), None, 0),
-            Token::new(TokenType::EOF, "".to_string(), None, 0),
-        ]);
+        assert_eq!(
+            tokens,
+            vec![
+                Token::new(TokenType::LEFT_PAREN, "(".to_string(), None, 0),
+                Token::new(TokenType::RIGHT_PAREN, ")".to_string(), None, 0),
+                Token::new(TokenType::LEFT_BRACE, "{".to_string(), None, 0),
+                Token::new(TokenType::RIGHT_BRACE, "}".to_string(), None, 0),
+                Token::new(TokenType::COMMA, ",".to_string(), None, 0),
+                Token::new(TokenType::DOT, ".".to_string(), None, 0),
+                Token::new(TokenType::MINUS, "-".to_string(), None, 0),
+                Token::new(TokenType::PLUS, "+".to_string(), None, 0),
+                Token::new(TokenType::STAR, "*".to_string(), None, 0),
+                Token::new(TokenType::SEMICOLON, ";".to_string(), None, 0),
+                Token::new(TokenType::EOF, "".to_string(), None, 0),
+            ]
+        );
     }
 
     #[test]
@@ -273,17 +277,20 @@ mod tests {
 
         let tokens = scanner.scan_tokens();
 
-        assert_eq!(tokens, vec![
-            Token::new(TokenType::BANG, "!".to_string(), None, 0),
-            Token::new(TokenType::BANG_EQUAL, "!=".to_string(), None, 0),
-            Token::new(TokenType::EQUAL, "=".to_string(), None, 0),
-            Token::new(TokenType::EQUAL_EQUAL, "==".to_string(), None, 0),
-            Token::new(TokenType::LESS, "<".to_string(), None, 0),
-            Token::new(TokenType::LESS_EQUAL, "<=".to_string(), None, 0),
-            Token::new(TokenType::GREATER, ">".to_string(), None, 0),
-            Token::new(TokenType::GREATER_EQUAL, ">=".to_string(), None, 0),
-            Token::new(TokenType::EOF, "".to_string(), None, 0),
-        ]);
+        assert_eq!(
+            tokens,
+            vec![
+                Token::new(TokenType::BANG, "!".to_string(), None, 0),
+                Token::new(TokenType::BANG_EQUAL, "!=".to_string(), None, 0),
+                Token::new(TokenType::EQUAL, "=".to_string(), None, 0),
+                Token::new(TokenType::EQUAL_EQUAL, "==".to_string(), None, 0),
+                Token::new(TokenType::LESS, "<".to_string(), None, 0),
+                Token::new(TokenType::LESS_EQUAL, "<=".to_string(), None, 0),
+                Token::new(TokenType::GREATER, ">".to_string(), None, 0),
+                Token::new(TokenType::GREATER_EQUAL, ">=".to_string(), None, 0),
+                Token::new(TokenType::EOF, "".to_string(), None, 0),
+            ]
+        );
     }
 
     #[test]
@@ -292,9 +299,10 @@ mod tests {
 
         let tokens = scanner.scan_tokens();
 
-        assert_eq!(tokens, vec![
-            Token::new(TokenType::EOF, "".to_string(), None, 0),
-        ]);
+        assert_eq!(
+            tokens,
+            vec![Token::new(TokenType::EOF, "".to_string(), None, 0),]
+        );
     }
 
     #[test]
@@ -303,10 +311,13 @@ mod tests {
 
         let tokens = scanner.scan_tokens();
 
-        assert_eq!(tokens, vec![
-            Token::new(TokenType::SLASH, "/".to_string(), None, 0),
-            Token::new(TokenType::EOF, "".to_string(), None, 0),
-        ]);
+        assert_eq!(
+            tokens,
+            vec![
+                Token::new(TokenType::SLASH, "/".to_string(), None, 0),
+                Token::new(TokenType::EOF, "".to_string(), None, 0),
+            ]
+        );
     }
 
     #[test]
@@ -315,11 +326,14 @@ mod tests {
 
         let tokens = scanner.scan_tokens();
 
-        assert_eq!(tokens, vec![
-            Token::new(TokenType::SLASH, "/".to_string(), None, 0),
-            Token::new(TokenType::STAR, "*".to_string(), None, 1),
-            Token::new(TokenType::EOF, "".to_string(), None, 2),
-        ]);
+        assert_eq!(
+            tokens,
+            vec![
+                Token::new(TokenType::SLASH, "/".to_string(), None, 0),
+                Token::new(TokenType::STAR, "*".to_string(), None, 1),
+                Token::new(TokenType::EOF, "".to_string(), None, 2),
+            ]
+        );
     }
 
     #[test]
@@ -328,10 +342,18 @@ mod tests {
 
         let tokens = scanner.scan_tokens();
 
-        assert_eq!(tokens, vec![
-            Token::new(TokenType::STRING, "\"this is a string\"".to_string(), Some(Object::Str("this is a string".to_string())), 0),
-            Token::new(TokenType::EOF, "".to_string(), None, 0),
-        ]);
+        assert_eq!(
+            tokens,
+            vec![
+                Token::new(
+                    TokenType::STRING,
+                    "\"this is a string\"".to_string(),
+                    Some(Object::Str("this is a string".to_string())),
+                    0
+                ),
+                Token::new(TokenType::EOF, "".to_string(), None, 0),
+            ]
+        );
     }
 
     #[test]
@@ -340,10 +362,18 @@ mod tests {
 
         let tokens = scanner.scan_tokens();
 
-        assert_eq!(tokens, vec![
-            Token::new(TokenType::NUMBER, "123".to_string(), Some(Object::Num(123_f64)), 0),
-            Token::new(TokenType::EOF, "".to_string(), None, 0),
-        ]);
+        assert_eq!(
+            tokens,
+            vec![
+                Token::new(
+                    TokenType::NUMBER,
+                    "123".to_string(),
+                    Some(Object::Num(123_f64)),
+                    0
+                ),
+                Token::new(TokenType::EOF, "".to_string(), None, 0),
+            ]
+        );
     }
 
     #[test]
@@ -352,10 +382,18 @@ mod tests {
 
         let tokens = scanner.scan_tokens();
 
-        assert_eq!(tokens, vec![
-            Token::new(TokenType::NUMBER, "123.456".to_string(), Some(Object::Num(123.456)), 0),
-            Token::new(TokenType::EOF, "".to_string(), None, 0),
-        ]);
+        assert_eq!(
+            tokens,
+            vec![
+                Token::new(
+                    TokenType::NUMBER,
+                    "123.456".to_string(),
+                    Some(Object::Num(123.456)),
+                    0
+                ),
+                Token::new(TokenType::EOF, "".to_string(), None, 0),
+            ]
+        );
     }
 
     #[test]
@@ -364,11 +402,14 @@ mod tests {
 
         let tokens = scanner.scan_tokens();
 
-        assert_eq!(tokens, vec![
-            Token::new(TokenType::OR, "or".to_string(), None, 0),
-            Token::new(TokenType::AND, "and".to_string(), None, 0),
-            Token::new(TokenType::CLASS, "class".to_string(), None, 0),
-            Token::new(TokenType::EOF, "".to_string(), None, 0),
-        ]);
+        assert_eq!(
+            tokens,
+            vec![
+                Token::new(TokenType::OR, "or".to_string(), None, 0),
+                Token::new(TokenType::AND, "and".to_string(), None, 0),
+                Token::new(TokenType::CLASS, "class".to_string(), None, 0),
+                Token::new(TokenType::EOF, "".to_string(), None, 0),
+            ]
+        );
     }
 }
