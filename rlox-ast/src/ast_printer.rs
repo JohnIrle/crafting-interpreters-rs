@@ -1,5 +1,5 @@
-use crate::expr::{Accept, Expr, Visitor};
 use crate::Token;
+use crate::expr::{Accept, Expr, Visitor};
 
 pub struct AstPrinter;
 
