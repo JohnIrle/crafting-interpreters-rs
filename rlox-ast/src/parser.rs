@@ -7,7 +7,7 @@ use TokenType::{
 };
 
 use crate::TokenType::{BANG, SLASH, STAR};
-use crate::{error, Expr, Token, TokenType};
+use crate::{Expr, Token, TokenType, error};
 
 pub struct Parser {
     tokens: Vec<Token>,
