@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2024 John Irle
+// SPDX-License-Identifier: MIT
+
 pub mod chunk;
 pub mod value;
 

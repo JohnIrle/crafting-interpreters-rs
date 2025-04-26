@@ -1,3 +1,8 @@
+<!--
+SPDX-FileCopyrightText: 2024 John Irle
+SPDX-License-Identifier: MIT
+-->
+
 # Crafting Interpreters in Rust
 
 This is an in progress project aiming to implement both versions of the Lox Language from the book [Crafting Interpreters](https://craftinginterpreters.com/) in Rust.

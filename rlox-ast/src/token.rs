@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2024 John Irle
+// SPDX-License-Identifier: MIT
+
 use crate::object::Object;
 use crate::token_type::TokenType;
 #[derive(Debug, Clone, PartialEq)]

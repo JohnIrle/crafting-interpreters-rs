@@ -1,10 +1,13 @@
+// SPDX-FileCopyrightText: 2024 John Irle
+// SPDX-License-Identifier: MIT
+
 use TokenType::{
     BANG_EQUAL, EQUAL_EQUAL, FALSE, GREATER, GREATER_EQUAL, LEFT_PAREN, LESS, LESS_EQUAL, MINUS,
     NIL, NUMBER, PLUS, RIGHT_PAREN, STRING, TRUE,
 };
 
 use crate::TokenType::{BANG, SLASH, STAR};
-use crate::{Expr, Token, TokenType, error};
+use crate::{error, Expr, Token, TokenType};
 
 pub struct Parser {
     tokens: Vec<Token>,

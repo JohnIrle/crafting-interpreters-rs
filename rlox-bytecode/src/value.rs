@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2024 John Irle
+// SPDX-License-Identifier: MIT
+
 use crate::grow_capacity;
 
 pub type Value = f64;

@@ -1,5 +1,8 @@
-use crate::Token;
+// SPDX-FileCopyrightText: 2024 John Irle
+// SPDX-License-Identifier: MIT
+
 use crate::expr::{Accept, Expr, Visitor};
+use crate::Token;
 
 pub struct AstPrinter;
 
