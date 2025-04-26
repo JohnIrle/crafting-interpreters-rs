@@ -1,5 +1,7 @@
 // SPDX-FileCopyrightText: 2024 John Irle
 // SPDX-License-Identifier: MIT
+//
+// This file is part of rlox-bytecode
 
 use rlox::chunk::Chunk;
 use rlox::chunk::OpCode::{OP_CONSTANT, OP_RETURN};

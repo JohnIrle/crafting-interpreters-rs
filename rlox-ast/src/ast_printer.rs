@@ -1,5 +1,7 @@
 // SPDX-FileCopyrightText: 2024 John Irle
 // SPDX-License-Identifier: MIT
+//
+// This file is part of rlox-ast
 
 use crate::Token;
 use crate::expr::{Accept, Expr, Visitor};
