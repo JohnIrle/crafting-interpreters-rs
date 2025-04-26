@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2024 John Irle
+// SPDX-License-Identifier: MIT
+
 use rlox::chunk::Chunk;
 use rlox::chunk::OpCode::{OP_CONSTANT, OP_RETURN};
 

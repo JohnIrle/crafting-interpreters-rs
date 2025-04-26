@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2024 John Irle
+// SPDX-License-Identifier: MIT
+
 fn main() {
     let mut runner = rlox::Runner::new();
     let args: Vec<String> = std::env::args().collect();

@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2024 John Irle
+// SPDX-License-Identifier: MIT
+
 use crate::Token;
 use crate::expr::{Accept, Expr, Visitor};
 
