@@ -1,5 +1,7 @@
 // SPDX-FileCopyrightText: 2024 John Irle
 // SPDX-License-Identifier: MIT
+//
+// This file is part of rlox-ast
 
 use TokenType::{
     BANG_EQUAL, EQUAL_EQUAL, FALSE, GREATER, GREATER_EQUAL, LEFT_PAREN, LESS, LESS_EQUAL, MINUS,

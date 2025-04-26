@@ -1,5 +1,7 @@
 // SPDX-FileCopyrightText: 2024 John Irle
 // SPDX-License-Identifier: MIT
+//
+// This file is part of rlox-bytecode
 
 use crate::grow_capacity;
 use crate::value::{Value, ValueArray};
