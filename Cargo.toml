@@ -3,6 +3,25 @@
 #
 # This file is part of crafting-interpreters-rs
 
+[package]
+name = "crafting-interpreters-rs"
+version = "0.1.0"
+authors = ["John Irle"]
+license = "MIT"
+edition = "2024"
+
+[lib]
+name = "rlox"
+path = "rlox-ast/src/lib.rs"
+
+[[bin]]
+name = "rlox-ast"
+path = "rlox-ast/src/main.rs"
+
+[[bin]]
+name = "generate_ast"
+path = "rlox-ast/src/generate_ast.rs"
+
 [workspace]
 resolver = "2"
 members = [
