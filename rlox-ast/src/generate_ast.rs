@@ -32,6 +32,13 @@ fn define_ast(output_dir: &str, base_name: &str, types: Vec<&str>) -> std::io::R
     let path = format!("{}/{}.rs", output_dir, base_name.to_lowercase());
     dbg!(&path);
     let mut file = std::fs::File::create(path)?;
+
+    // Copyright and License header
+    writeln!(
+        file,
+        "// SPDX-FileCopyrightText: 2024 John Irle\n// SPDX-License-Identifier: MIT\n//\n// This file is part of rlox-ast\n"
+    )?;
+
     writeln!(file, "use crate::Token;")?;
     writeln!(file)?;
     writeln!(file, "pub enum {} {{", base_name)?;
@@ -135,19 +142,14 @@ fn define_visitor(
             .collect::<Vec<&str>>()
             .join(", ");
 
+        write!(file, r#"            Self::{}({}) => "#, type_name, &fields)?;
         writeln!(
             file,
-            "            {}::{}({}) => {{",
-            base_name, type_name, &fields
-        )?;
-        writeln!(
-            file,
-            "                visitor.visit_{}_{}({})",
+            "visitor.visit_{}_{}({}),",
             type_name.to_lowercase(),
             base_name.to_lowercase(),
             fields
         )?;
-        writeln!(file, "            }},")?;
     }
 
     writeln!(file, "        }}")?;
