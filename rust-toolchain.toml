@@ -1,0 +1,8 @@
+# SPDX-FileCopyrightText: 2026 John Irle
+# SPDX-License-Identifier: MIT
+#
+# This file is part of crafting-interpreters-rs
+
+[toolchain]
+channel = "1.99.1"
+components = ["rustfmt", "clippy"]
